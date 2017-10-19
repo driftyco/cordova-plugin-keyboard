@@ -60,14 +60,14 @@ Keyboard.fireOnResize = function (height, screenHeight, ele) {
 
 Keyboard.hideFormAccessoryBar = function (hide, success) {
     if (hide !== null && hide !== undefined) {
-        exec(success, null, "Keyboard", "hideFormAccessoryBar", [hide]);
+        exec(success, null, "IonicKeyboard", "hideFormAccessoryBar", [hide]);
     } else {
-        exec(success, null, "Keyboard", "hideFormAccessoryBar", []);
+        exec(success, null, "IonicKeyboard", "hideFormAccessoryBar", []);
     }
 };
 
 Keyboard.hide = function () {
-    exec(null, null, "Keyboard", "hide", []);
+    exec(null, null, "IonicKeyboard", "hide", []);
 };
 
 Keyboard.show = function () {
