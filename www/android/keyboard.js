@@ -29,15 +29,15 @@ Keyboard.fireOnShowing = function (height) {
 };
 
 Keyboard.hideKeyboardAccessoryBar = function (hide) {
-    exec(null, null, "Keyboard", "hideKeyboardAccessoryBar", [hide]);
+    exec(null, null, "IonicKeyboard", "hideKeyboardAccessoryBar", [hide]);
 };
 
 Keyboard.close = function () {
-    exec(null, null, "Keyboard", "close", []);
+    exec(null, null, "IonicKeyboard", "close", []);
 };
 
 Keyboard.show = function () {
-    exec(null, null, "Keyboard", "show", []);
+    exec(null, null, "IonicKeyboard", "show", []);
 };
 
 Keyboard.disableScroll = function (disable) {
@@ -45,7 +45,7 @@ Keyboard.disableScroll = function (disable) {
 };
 
 channel.onCordovaReady.subscribe(function () {
-    exec(success, null, 'Keyboard', 'init', []);
+    exec(success, null, 'IonicKeyboard', 'init', []);
 
     function success(msg) {
         var action = msg.charAt(0);
