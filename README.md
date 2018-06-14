@@ -137,7 +137,7 @@ window.addEventListener('keyboardWillShow', (event) => {
 
 ### keyboardWillHide
 
-> This event is fired when the keyboard is fully closed.
+> This event is fired when the keyboard will be closed.
 
 Attach handler to this event to be able to receive notification when keyboard is about to be closed.
 
