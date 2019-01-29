@@ -186,8 +186,12 @@ typedef enum : NSUInteger {
     
     int _paddingBottom = (int)self.paddingBottom;
         
-    if (statusBarHeight == 40) {
+    if (statusBarHeight == 40 || statusBarHeight == 20) {
         _paddingBottom = _paddingBottom + 20;
+    }
+    if (statusBarHeight == 44) {
+        // safe area bottom
+        _paddingBottom += 39;
     }
     NSLog(@"CDVIonicKeyboard: updating frame");
     // NOTE: to handle split screen correctly, the application's window bounds must be used as opposed to the screen's bounds.
