@@ -49,15 +49,15 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 Set to true to hide the additional toolbar that is on top of the keyboard. This toolbar features the Prev, Next, and Done buttons.
 
 ```js
-Keyboard.hideFormAccessoryBar(value, successCallback);
+window.Keyboard.hideFormAccessoryBar(value, successCallback);
 ```
 
 ##### Quick Example
 
 ```js
-Keyboard.hideFormAccessoryBar(true);
-Keyboard.hideFormAccessoryBar(false);
-Keyboard.hideFormAccessoryBar(null, (currentValue) => { console.log(currentValue); });
+window.Keyboard.hideFormAccessoryBar(true);
+window.Keyboard.hideFormAccessoryBar(false);
+window.Keyboard.hideFormAccessoryBar(null, (currentValue) => { console.log(currentValue); });
 ```
 
 ### Keyboard.hide
@@ -67,7 +67,7 @@ Keyboard.hideFormAccessoryBar(null, (currentValue) => { console.log(currentValue
 Call this method to hide the keyboard
 
 ```js
-Keyboard.hide();
+window.Keyboard.hide();
 ```
 
 
@@ -78,7 +78,7 @@ Keyboard.hide();
 Call this method to show the keyboard.
 
 ```js
-Keyboard.show();
+window.Keyboard.show();
 ```
 
 ### Keyboard.setResizeMode (for iOS only)  
@@ -88,9 +88,9 @@ Keyboard.show();
 
 ```js 
 // Possible values are the same as for 'KeyboardResizeMode' preference 
-Keyboard.setResizeMode('native'); 
-Keyboard.setResizeMode('body'); 
-Keyboard.setResizeMode('ionic'); 
+window.Keyboard.setResizeMode('native'); 
+window.Keyboard.setResizeMode('body'); 
+window.Keyboard.setResizeMode('ionic'); 
 ```
 
 ## Properties
@@ -102,7 +102,7 @@ Keyboard.setResizeMode('ionic'); 
 Read this property to determine if the keyboard is visible.
 
 ```js
-if (Keyboard.isVisible) {
+if (window.Keyboard.isVisible) {
     // do something
 }
 ```
