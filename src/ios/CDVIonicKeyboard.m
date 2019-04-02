@@ -83,7 +83,7 @@ NSString* _keyboardStyle;
                 self.keyboardResizes = ResizeBody;
             }
         }
-        NSLog(@"CDVIonicKeyboard: resize mode %d", self.keyboardResizes);
+        NSLog(@"CDVIonicKeyboard: resize mode %lu", (unsigned long)self.keyboardResizes);
     }
     self.hideFormAccessoryBar = [settings cordovaBoolSettingForKey:@"HideKeyboardFormAccessoryBar" defaultValue:YES];
 
