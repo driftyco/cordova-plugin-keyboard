@@ -39,10 +39,7 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 <preference name="KeyboardResizeMode" value="native" />
 ```
 
-
-### KeyboardStyle
-
-iOS only
+### KeyboardStyle (for iOS only)
 
 > String ('light' by default)
 
@@ -54,7 +51,6 @@ iOS only
 ```xml
 <preference name="KeyboardStyle" value="dark" />
 ```
-
 
 ## Methods
 
@@ -68,7 +64,7 @@ Set to true to hide the additional toolbar that is on top of the keyboard. This 
 Keyboard.hideFormAccessoryBar(value, successCallback);
 ```
 
-##### Quick Example
+#### Quick Example
 
 ```js
 Keyboard.hideFormAccessoryBar(true);
@@ -86,7 +82,6 @@ Call this method to hide the keyboard
 Keyboard.hide();
 ```
 
-
 ### Keyboard.show
 
 > Show the keyboard
@@ -97,16 +92,27 @@ Call this method to show the keyboard.
 Keyboard.show();
 ```
 
-### Keyboard.setResizeMode (for iOS only)  
+### Keyboard.setResizeMode (for iOS only)
+
 > Programmatically set the resize mode
 
-  Call the method with parameter to set the resize mode.  
+Call the method with parameter to set the resize mode.
 
-```js 
-// Possible values are the same as for 'KeyboardResizeMode' preference 
-Keyboard.setResizeMode('native'); 
-Keyboard.setResizeMode('body'); 
-Keyboard.setResizeMode('ionic'); 
+```js
+// Possible values are the same as for 'KeyboardResizeMode' preference
+Keyboard.setResizeMode('native');
+Keyboard.setResizeMode('body');
+Keyboard.setResizeMode('ionic');
+```
+
+### Keyboard.setKeyboardStyle (for iOS only)
+
+> Programmatically set the keyboard style
+
+```js
+// Possible values are the same as for 'KeyboardStyle' preference
+Keyboard.setKeyboardStyle('light'); // <- default
+Keyboard.setKeyboardStyle('dark');
 ```
 
 ## Properties
