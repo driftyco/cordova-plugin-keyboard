@@ -53,10 +53,9 @@ NSTimer *hideTimer;
 
 #pragma mark Initialize
 
-static NSString* UIClassString;
-static NSString* WKClassString;
-static NSString* UITraitsClassString;
-
+NSString* UIClassString;
+NSString* WKClassString;
+NSString* UITraitsClassString;
 NSString* _keyboardStyle;
 
 - (void)pluginInitialize
