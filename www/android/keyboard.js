@@ -3,7 +3,6 @@ var argscheck = require('cordova/argscheck'),
     exec = require('cordova/exec'),
     channel = require('cordova/channel');
 
-
 var Keyboard = function () {};
 
 Keyboard.fireOnShow = function (height) {
@@ -57,6 +56,10 @@ Keyboard.disableScroll = function (disable) {
 Keyboard.setResizeMode = function (mode) {
     console.warn("Keyboard.setResizeMode() not supported in Android");
 }
+
+Keyboard.setKeyboardStyle = function(style) {
+    console.warn("Keyboard.setKeyboardStyle() not supported in Android");
+};
 
 channel.onCordovaReady.subscribe(function () {
     exec(success, null, 'Keyboard', 'init', []);

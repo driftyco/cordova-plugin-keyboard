@@ -53,8 +53,18 @@ NSTimer *hideTimer;
 
 #pragma mark Initialize
 
+static NSString* UIClassString;
+static NSString* WKClassString;
+static NSString* UITraitsClassString;
+
+NSString* _keyboardStyle;
+
 - (void)pluginInitialize
 {
+    UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
+    WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
+    UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
+
     NSDictionary *settings = self.commandDelegate.settings;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name: UIApplicationDidChangeStatusBarFrameNotification object:nil];
@@ -77,6 +87,13 @@ NSTimer *hideTimer;
         NSLog(@"CDVIonicKeyboard: resize mode %d", self.keyboardResizes);
     }
     self.hideFormAccessoryBar = [settings cordovaBoolSettingForKey:@"HideKeyboardFormAccessoryBar" defaultValue:YES];
+
+    // get the KeyboardStyle value from config.xml
+    NSString *keyboardStyle = [settings cordovaSettingForKey:@"KeyboardStyle"];
+    if (keyboardStyle) {
+        // call to setKeyboardStyle
+        [self setKeyboardStyle:keyboardStyle];
+    }
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
@@ -139,6 +156,9 @@ NSTimer *hideTimer;
         [self setKeyboardHeight:height delay:duration/2.0];
         [self resetScrollView];
     }
+    
+    // call to setKeyboardStyle in case it's changed
+    [self setKeyboardStyle:self.keyboardStyle];
 
     NSString *js = [NSString stringWithFormat:@"Keyboard.fireOnShowing(%d);", (int)height];
     [self.commandDelegate evalJs:js];
@@ -228,6 +248,48 @@ NSTimer *hideTimer;
     [self resetScrollView];
 }
 
+#pragma mark Keyboard Style
+
+ - (NSString*)keyboardStyle
+{
+    return _keyboardStyle;
+}
+
+ - (void)setKeyboardStyle:(NSString*)style
+{
+    IMP newImp = [style isEqualToString:@"dark"] ? imp_implementationWithBlock(^(id _s) {
+        return UIKeyboardAppearanceDark;
+    }) : imp_implementationWithBlock(^(id _s) {
+        return UIKeyboardAppearanceLight;
+    });
+    
+    if (self.isWK) {
+        for (NSString* classString in @[WKClassString, UITraitsClassString]) {
+            Class c = NSClassFromString(classString);
+            Method m = class_getInstanceMethod(c, @selector(keyboardAppearance));
+            
+            if (m != NULL) {
+                method_setImplementation(m, newImp);
+            } else {
+                class_addMethod(c, @selector(keyboardAppearance), newImp, "l@:");
+            }
+        }
+    }
+    else {
+        for (NSString* classString in @[UIClassString, UITraitsClassString]) {
+            Class c = NSClassFromString(classString);
+            Method m = class_getInstanceMethod(c, @selector(keyboardAppearance));
+            
+            if (m != NULL) {
+                method_setImplementation(m, newImp);
+            } else {
+                class_addMethod(c, @selector(keyboardAppearance), newImp, "l@:");
+            }
+        }
+    }
+
+    _keyboardStyle = style;
+}
 
 #pragma mark HideFormAccessoryBar
 
@@ -239,9 +301,6 @@ static IMP WKOriginalImp;
     if (hideFormAccessoryBar == _hideFormAccessoryBar) {
         return;
     }
-
-    NSString* UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
-    NSString* WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
 
     Method UIMethod = class_getInstanceMethod(NSClassFromString(UIClassString), @selector(inputAccessoryView));
     Method WKMethod = class_getInstanceMethod(NSClassFromString(WKClassString), @selector(inputAccessoryView));
@@ -301,6 +360,17 @@ static IMP WKOriginalImp;
     }
 }
 
+- (void)keyboardStyle:(CDVInvokedUrlCommand*)command
+{
+    id value = [command.arguments objectAtIndex:0];
+    if ([value isKindOfClass:[NSString class]]) {
+        value = [(NSString*)value lowercaseString];
+    } else {
+        value = @"light";
+    }
+
+     self.keyboardStyle = value;
+}
 
 #pragma mark dealloc
 

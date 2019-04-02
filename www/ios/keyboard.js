@@ -94,6 +94,10 @@ Keyboard.setResizeMode = function (mode) {
     exec(null, null, "Keyboard", "setResizeMode", [mode]);
 }
 
+Keyboard.setKeyboardStyle = function(style) {
+    exec(null, null, "Keyboard", "keyboardStyle", [style]);
+};
+
 Keyboard.isVisible = false;
 
 module.exports = Keyboard;

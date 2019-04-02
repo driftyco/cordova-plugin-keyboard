@@ -40,6 +40,22 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 ```
 
 
+### KeyboardStyle
+
+iOS only
+
+> String ('light' by default)
+
+#### Possible values
+
+- `light`
+- `dark`
+
+```xml
+<preference name="KeyboardStyle" value="dark" />
+```
+
+
 ## Methods
 
 ### Keyboard.hideFormAccessoryBar
