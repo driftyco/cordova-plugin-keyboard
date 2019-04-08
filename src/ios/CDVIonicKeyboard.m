@@ -136,7 +136,7 @@ NSTimer *hideTimer;
 
     if (self.isWK) {
         double duration = [[note.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-        [self setKeyboardHeight:height delay:duration/2.0];
+        [self setKeyboardHeight:height delay:duration+0.2];
         [self resetScrollView];
     }
 
