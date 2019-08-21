@@ -42,11 +42,11 @@ Keyboard.hideFormAccessoryBar = Keyboard.hideKeyboardAccessoryBar = function (hi
 };
 
 Keyboard.hide = function () {
-    exec(null, null, "Keyboard", "hide", []);
+    exec(null, null, "CDVIonicKeyboard", "hide", []);
 };
 
 Keyboard.show = function () {
-    exec(null, null, "Keyboard", "show", []);
+    exec(null, null, "CDVIonicKeyboard", "show", []);
 };
 
 Keyboard.disableScroll = function (disable) {
@@ -62,7 +62,7 @@ Keyboard.setKeyboardStyle = function(style) {
 };
 
 channel.onCordovaReady.subscribe(function () {
-    exec(success, null, 'Keyboard', 'init', []);
+    exec(success, null, 'CDVIonicKeyboard', 'init', []);
 
     function success(msg) {
         var action = msg.charAt(0);

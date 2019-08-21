@@ -70,14 +70,14 @@ Keyboard.fireOnResize = function (height, screenHeight, ele) {
 
 Keyboard.hideFormAccessoryBar = function (hide, success) {
     if (hide !== null && hide !== undefined) {
-        exec(success, null, "Keyboard", "hideFormAccessoryBar", [hide]);
+        exec(success, null, "CDVIonicKeyboard", "hideFormAccessoryBar", [hide]);
     } else {
-        exec(success, null, "Keyboard", "hideFormAccessoryBar", []);
+        exec(success, null, "CDVIonicKeyboard", "hideFormAccessoryBar", []);
     }
 };
 
 Keyboard.hide = function () {
-    exec(null, null, "Keyboard", "hide", []);
+    exec(null, null, "CDVIonicKeyboard", "hide", []);
 };
 
 Keyboard.show = function () {
@@ -87,15 +87,15 @@ Keyboard.show = function () {
 };
 
 Keyboard.disableScroll = function (disable) {
-    exec(null, null, "Keyboard", "disableScroll", [disable]);
+    exec(null, null, "CDVIonicKeyboard", "disableScroll", [disable]);
 };
 
 Keyboard.setResizeMode = function (mode) {
-    exec(null, null, "Keyboard", "setResizeMode", [mode]);
+    exec(null, null, "CDVIonicKeyboard", "setResizeMode", [mode]);
 }
 
 Keyboard.setKeyboardStyle = function(style) {
-    exec(null, null, "Keyboard", "keyboardStyle", [style]);
+    exec(null, null, "CDVIonicKeyboard", "keyboardStyle", [style]);
 };
 
 Keyboard.isVisible = false;
