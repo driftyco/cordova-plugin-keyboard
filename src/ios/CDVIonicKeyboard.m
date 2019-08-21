@@ -87,11 +87,13 @@ NSString* _keyboardStyle;
     }
     self.hideFormAccessoryBar = [settings cordovaBoolSettingForKey:@"HideKeyboardFormAccessoryBar" defaultValue:YES];
 
-    // get the KeyboardStyle value from config.xml
     NSString *keyboardStyle = [settings cordovaSettingForKey:@"KeyboardStyle"];
     if (keyboardStyle) {
-        // call to setKeyboardStyle
         [self setKeyboardStyle:keyboardStyle];
+    }
+
+    if ([settings cordovaBoolSettingForKey:@"KeyboardAppearanceDark" defaultValue:NO]) {
+        [self setKeyboardStyle:@"dark"];
     }
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -156,7 +158,6 @@ NSString* _keyboardStyle;
         [self resetScrollView];
     }
     
-    // call to setKeyboardStyle in case it's changed
     [self setKeyboardStyle:self.keyboardStyle];
 
     NSString *js = [NSString stringWithFormat:@"Keyboard.fireOnShowing(%d);", (int)height];
