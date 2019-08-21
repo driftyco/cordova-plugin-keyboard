@@ -87,7 +87,7 @@ Keyboard.show = function () {
 };
 
 Keyboard.disableScroll = function (disable) {
-    console.warn("Keyboard.disableScroll() was removed");
+    exec(null, null, "Keyboard", "disableScroll", [disable]);
 };
 
 Keyboard.setResizeMode = function (mode) {

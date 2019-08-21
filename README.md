@@ -115,6 +115,16 @@ Keyboard.setKeyboardStyle('light'); // <- default
 Keyboard.setKeyboardStyle('dark');
 ```
 
+### Keyboard.disableScroll (for iOS only)
+
+> Programmatically enable or disable the WebView scroll
+
+```js
+Keyboard.disableScroll(true); // <- default
+Keyboard.disableScroll(false);
+```
+
+
 ## Properties
 
 ### Keyboard.isVisible

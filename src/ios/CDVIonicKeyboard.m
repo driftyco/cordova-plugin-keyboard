@@ -35,8 +35,11 @@ typedef enum : NSUInteger {
 
 @interface CDVIonicKeyboard () <UIScrollViewDelegate>
 
-@property (nonatomic, readwrite, assign) BOOL keyboardIsVisible;
+@property (readwrite, assign, nonatomic) BOOL disableScroll;
+@property (readwrite, assign, nonatomic) BOOL hideFormAccessoryBar;
+@property (readwrite, assign, nonatomic) BOOL keyboardIsVisible;
 @property (nonatomic, readwrite) ResizePolicy keyboardResizes;
+@property (readwrite, assign, nonatomic) NSString* keyboardStyle;
 @property (nonatomic, readwrite) BOOL isWK;
 @property (nonatomic, readwrite) int paddingBottom;
 
@@ -56,7 +59,6 @@ NSTimer *hideTimer;
 NSString* UIClassString;
 NSString* WKClassString;
 NSString* UITraitsClassString;
-NSString* _keyboardStyle;
 
 - (void)pluginInitialize
 {
@@ -65,6 +67,8 @@ NSString* _keyboardStyle;
     UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
 
     NSDictionary *settings = self.commandDelegate.settings;
+
+    self.disableScroll = ![settings cordovaBoolSettingForKey:@"ScrollEnabled" defaultValue:NO];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarDidChangeFrame:) name: UIApplicationDidChangeStatusBarFrameNotification object:nil];
 
@@ -250,11 +254,6 @@ NSString* _keyboardStyle;
 
 #pragma mark Keyboard Style
 
- - (NSString*)keyboardStyle
-{
-    return _keyboardStyle;
-}
-
  - (void)setKeyboardStyle:(NSString*)style
 {
     IMP newImp = [style isEqualToString:@"dark"] ? imp_implementationWithBlock(^(id _s) {
@@ -323,6 +322,26 @@ static IMP WKOriginalImp;
     _hideFormAccessoryBar = hideFormAccessoryBar;
 }
 
+#pragma mark scroll
+
+- (void)setDisableScroll:(BOOL)disableScroll {
+    if (disableScroll == _disableScroll) {
+        return;
+    }
+    if (disableScroll) {
+        self.webView.scrollView.scrollEnabled = NO;
+        self.webView.scrollView.delegate = self;
+    }
+    else {
+        self.webView.scrollView.scrollEnabled = YES;
+        self.webView.scrollView.delegate = nil;
+    }
+    _disableScroll = disableScroll;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [scrollView setContentOffset: CGPointZero];
+}
 
 #pragma mark Plugin interface
 
@@ -346,7 +365,7 @@ static IMP WKOriginalImp;
     [self.webView endEditing:YES];
 }
 
--(void)setResizeMode:(CDVInvokedUrlCommand *)command
+- (void)setResizeMode:(CDVInvokedUrlCommand *)command
 {
     NSString * mode = [command.arguments objectAtIndex:0];
     if ([mode isEqualToString:@"ionic"]) {
@@ -370,6 +389,16 @@ static IMP WKOriginalImp;
     }
 
      self.keyboardStyle = value;
+}
+
+- (void)disableScroll:(CDVInvokedUrlCommand*)command {
+    if (!command.arguments || ![command.arguments count]){
+        return;
+    }
+    id value = [command.arguments objectAtIndex:0];
+    if (value != [NSNull null]) {
+        self.disableScroll = [value boolValue];
+    }
 }
 
 #pragma mark dealloc
