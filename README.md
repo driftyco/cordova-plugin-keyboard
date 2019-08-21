@@ -13,7 +13,7 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 
 ## Preferences
 
-### KeyboardResize
+### KeyboardResize (for iOS only)
 
 > Boolean (true by default)
 
@@ -25,7 +25,7 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 <preference name="KeyboardResize" value="true" />
 ```
 
-### KeyboardResizeMode
+### KeyboardResizeMode (for iOS only)
 
 > String ('native' by default)
 
@@ -54,7 +54,7 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 
 ## Methods
 
-### Keyboard.hideFormAccessoryBar
+### Keyboard.hideFormAccessoryBar (for iOS only)
 
 > Hide the keyboard toolbar.
 
@@ -82,7 +82,7 @@ Call this method to hide the keyboard
 Keyboard.hide();
 ```
 
-### Keyboard.show
+### Keyboard.show  (for Android only)
 
 > Show the keyboard
 

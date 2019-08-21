@@ -38,7 +38,7 @@ Keyboard.fireOnShowing = function (height) {
 };
 
 Keyboard.hideFormAccessoryBar = Keyboard.hideKeyboardAccessoryBar = function (hide) {
-    exec(null, null, "Keyboard", "hideKeyboardAccessoryBar", [hide]);
+    console.warn("Keyboard.hideKeyboardAccessoryBar() not supported in Android");
 };
 
 Keyboard.hide = function () {
@@ -50,7 +50,7 @@ Keyboard.show = function () {
 };
 
 Keyboard.disableScroll = function (disable) {
-    console.warn("Keyboard.disableScroll() not supported");
+    console.warn("Keyboard.disableScroll() not supported in Android");
 };
 
 Keyboard.setResizeMode = function (mode) {
