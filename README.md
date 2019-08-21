@@ -52,6 +52,19 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 <preference name="KeyboardStyle" value="dark" />
 ```
 
+### HideKeyboardFormAccessoryBar (for iOS only)
+
+> Boolean (true by default)
+
+#### Possible values
+- `true`: hides the keyboard accessory bar.
+- `false`: shows the keyboard accessory bar.
+
+```xml
+<preference name="HideKeyboardFormAccessoryBar" value="false" />
+```
+
+
 ## Methods
 
 ### Keyboard.hideFormAccessoryBar (for iOS only)
@@ -82,7 +95,7 @@ Call this method to hide the keyboard
 Keyboard.hide();
 ```
 
-### Keyboard.show  (for Android only)
+### Keyboard.show (for Android only)
 
 > Show the keyboard
 
