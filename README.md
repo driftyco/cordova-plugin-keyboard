@@ -64,6 +64,21 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 <preference name="HideKeyboardFormAccessoryBar" value="false" />
 ```
 
+### resizeOnFullScreen (for Android only)
+
+There is an Android bug that prevents the keyboard from resizing the WebView when the app is in full screen (i.e. if StatusBar plugin is used to hide the StatusBar). This setting, if set to true, add a workaround that resizes the WebView even when the app is in full screen.
+
+> Boolean (false by default)
+
+#### Possible values
+- `false`: doesn't resize the WebView when the app is in full screen.
+- `true`: resizes the WebView when the app is in full screen.
+
+
+```xml
+<preference name="resizeOnFullScreen" value="true" />
+```
+
 
 ## Methods
 

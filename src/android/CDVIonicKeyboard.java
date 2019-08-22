@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 
@@ -20,10 +21,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.Display;
 import android.graphics.Point;
 import android.os.Build;
+import android.widget.FrameLayout;
 
 public class CDVIonicKeyboard extends CordovaPlugin {
     private OnGlobalLayoutListener list;
     private View rootView;
+    private View mChildOfContent;
+    private int usableHeightPrevious;
+    private FrameLayout.LayoutParams frameLayoutParams;
 
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
@@ -66,11 +71,16 @@ public class CDVIonicKeyboard extends CordovaPlugin {
                     final float density = dm.density;
 
                     //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
-                    rootView = cordova.getActivity().getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+                    FrameLayout content = (FrameLayout) cordova.getActivity().findViewById(android.R.id.content);
+                    rootView = content.getRootView();
                     list = new OnGlobalLayoutListener() {
                         int previousHeightDiff = 0;
                         @Override
                         public void onGlobalLayout() {
+                            boolean resize = preferences.getBoolean("resizeOnFullScreen", false);
+                            if (resize) {
+                                possiblyResizeChildOfContent();
+                            }
                             Rect r = new Rect();
                             //r will be populated with the coordinates of your view that area still visible.
                             rootView.getWindowVisibleDisplayFrame(r);
@@ -110,12 +120,33 @@ public class CDVIonicKeyboard extends CordovaPlugin {
                                 callbackContext.sendPluginResult(result);
                             }
                             previousHeightDiff = pixelHeightDiff;
-                         }
+                        }
+
+                        private void possiblyResizeChildOfContent() {
+                            int usableHeightNow = computeUsableHeight();
+                            if (usableHeightNow != usableHeightPrevious) {
+                                int usableHeightSansKeyboard = mChildOfContent.getRootView().getHeight();
+                                int heightDifference = usableHeightSansKeyboard - usableHeightNow;
+                                if (heightDifference > (usableHeightSansKeyboard/4)) {
+                                    frameLayoutParams.height = usableHeightSansKeyboard - heightDifference;
+                                } else {
+                                    frameLayoutParams.height = usableHeightSansKeyboard;
+                                }
+                                mChildOfContent.requestLayout();
+                                usableHeightPrevious = usableHeightNow;
+                            }
+                        }
+
+                        private int computeUsableHeight() {
+                            Rect r = new Rect();
+                            mChildOfContent.getWindowVisibleDisplayFrame(r);
+                            return (r.bottom - r.top);
+                        }
                     };
 
+                    mChildOfContent = content.getChildAt(0);
                     rootView.getViewTreeObserver().addOnGlobalLayoutListener(list);
-
-
+                    frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
                     PluginResult dataResult = new PluginResult(PluginResult.Status.OK);
                     dataResult.setKeepCallback(true);
                     callbackContext.sendPluginResult(dataResult);
