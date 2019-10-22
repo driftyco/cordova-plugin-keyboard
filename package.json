@@ -23,7 +23,7 @@
     "cordova-android"
   ],
   "author": "Apache Software Foundation",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ionic-team/cordova-plugin-ionic-keyboard/issues"
   },
