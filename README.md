@@ -13,6 +13,16 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 
 ## Preferences
 
+### KeyboardDelayDuration (for IOS Only)
+
+When styling your app like the Login page with (vh). The keyboard open delay might not be desirable. So this option can be used to configure the delay in which the keyboard is open.
+
+> Double (0.2 by default)
+
+```xml
+<preference name="KeyboardDelayDuration" value="0.2" />
+```
+
 ### KeyboardResize (for iOS only)
 
 > Boolean (true by default)

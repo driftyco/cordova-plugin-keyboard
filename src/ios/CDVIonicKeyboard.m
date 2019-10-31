@@ -155,10 +155,19 @@ NSString* UITraitsClassString;
     }
     CGRect rect = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     double height = rect.size.height;
+    double delayedDuration = 0.2;
+
+    NSDictionary *settings = self.commandDelegate.settings;
+    NSString *delayDurationString = [settings cordovaSettingForKey:@"KeyboardDelayDuration"];
+
+    if (delayDurationString) {
+        // convert string into double
+        delayedDuration = [delayDurationString doubleValue];
+    }
 
     if (self.isWK) {
         double duration = [[note.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-        [self setKeyboardHeight:height delay:duration+0.2];
+        [self setKeyboardHeight:height delay:duration+delayedDuration];
         [self resetScrollView];
     }
     
