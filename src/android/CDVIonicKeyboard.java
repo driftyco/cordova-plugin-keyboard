@@ -10,11 +10,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
 // import additionally required classes for calculating screen height
@@ -140,7 +142,14 @@ public class CDVIonicKeyboard extends CordovaPlugin {
                         private int computeUsableHeight() {
                             Rect r = new Rect();
                             mChildOfContent.getWindowVisibleDisplayFrame(r);
-                            return (r.bottom - r.top);
+                            if ( checkStatusBarTransparent() ) return r.bottom;
+                            return r.height();
+                        }
+
+                        private boolean checkStatusBarTransparent() {
+                            final Window window = cordova.getActivity().getWindow();
+                            return ( window.getStatusBarColor() == Color.TRANSPARENT
+                                    || window.getDecorView().getSystemUiVisibility() == View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN );
                         }
                     };
 
