@@ -10,11 +10,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
 // import additionally required classes for calculating screen height
@@ -73,6 +75,7 @@ public class CDVIonicKeyboard extends CordovaPlugin {
                     //http://stackoverflow.com/a/4737265/1091751 detect if keyboard is showing
                     FrameLayout content = (FrameLayout) cordova.getActivity().findViewById(android.R.id.content);
                     rootView = content.getRootView();
+                    
                     list = new OnGlobalLayoutListener() {
                         int previousHeightDiff = 0;
                         @Override
@@ -125,13 +128,7 @@ public class CDVIonicKeyboard extends CordovaPlugin {
                         private void possiblyResizeChildOfContent() {
                             int usableHeightNow = computeUsableHeight();
                             if (usableHeightNow != usableHeightPrevious) {
-                                int usableHeightSansKeyboard = mChildOfContent.getRootView().getHeight();
-                                int heightDifference = usableHeightSansKeyboard - usableHeightNow;
-                                if (heightDifference > (usableHeightSansKeyboard/4)) {
-                                    frameLayoutParams.height = usableHeightSansKeyboard - heightDifference;
-                                } else {
-                                    frameLayoutParams.height = usableHeightSansKeyboard;
-                                }
+                                frameLayoutParams.height = usableHeightNow;
                                 mChildOfContent.requestLayout();
                                 usableHeightPrevious = usableHeightNow;
                             }
@@ -140,7 +137,7 @@ public class CDVIonicKeyboard extends CordovaPlugin {
                         private int computeUsableHeight() {
                             Rect r = new Rect();
                             mChildOfContent.getWindowVisibleDisplayFrame(r);
-                            return (r.bottom - r.top);
+                            return r.bottom;
                         }
                     };
 
