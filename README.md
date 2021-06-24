@@ -64,6 +64,18 @@ cordova plugin add cordova-plugin-ionic-keyboard --save
 <preference name="HideKeyboardFormAccessoryBar" value="false" />
 ```
 
+### HideSuggestionBar (for iOS only)
+
+> Boolean (false by default)
+
+#### Possible values
+- `true`: hides the keyboard Suggestion bar.
+- `false`: shows the keyboard Suggestion bar.
+
+```xml
+<preference name="HideSuggestionBar" value="false" />
+```
+
 ### resizeOnFullScreen (for Android only)
 
 There is an Android bug that prevents the keyboard from resizing the WebView when the app is in full screen (i.e. if StatusBar plugin is used to hide the StatusBar). This setting, if set to true, add a workaround that resizes the WebView even when the app is in full screen.
@@ -98,6 +110,23 @@ Keyboard.hideFormAccessoryBar(value, successCallback);
 Keyboard.hideFormAccessoryBar(true);
 Keyboard.hideFormAccessoryBar(false);
 Keyboard.hideFormAccessoryBar(null, (currentValue) => { console.log(currentValue); });
+```
+
+### Keyboard.hideSuggestionBar (for iOS only)
+
+> Hide the keyboard suggestion Bar.
+
+Set to true to hide the additional suggestionbar that is on top of the keyboard. This suggestionbar features the OTP, Username, and Password other autofill values.
+
+```js
+Keyboard.hideSuggestionBar(value);
+```
+
+#### Quick Example
+
+```js
+Keyboard.hideSuggestionBar(true);
+Keyboard.hideSuggestionBar(false);
 ```
 
 ### Keyboard.hide
