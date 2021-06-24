@@ -37,6 +37,8 @@ typedef enum : NSUInteger {
 
 @property (readwrite, assign, nonatomic) BOOL disableScroll;
 @property (readwrite, assign, nonatomic) BOOL hideFormAccessoryBar;
+@property (readwrite, assign, nonatomic) BOOL hideSuggestionBar;
+@property (readwrite, assign, nonatomic) BOOL isMethodSwizzled;
 @property (readwrite, assign, nonatomic) BOOL keyboardIsVisible;
 @property (nonatomic, readwrite) ResizePolicy keyboardResizes;
 @property (readwrite, assign, nonatomic) NSString* keyboardStyle;
@@ -59,12 +61,16 @@ NSTimer *hideTimer;
 NSString* UIClassString;
 NSString* WKClassString;
 NSString* UITraitsClassString;
+NSString* SelectorString;
+NSString* SuggestionClassString;
 
 - (void)pluginInitialize
 {
     UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
     WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
     UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
+    SelectorString = [@[@"is", @"Visible", @"For", @"Input", @"Delegate", @":", @"input", @"Views", @":"] componentsJoinedByString:@""];
+    SuggestionClassString = [@[@"UI", @"Prediction", @"View", @"Controller"] componentsJoinedByString:@""];
 
     NSDictionary *settings = self.commandDelegate.settings;
 
@@ -90,6 +96,7 @@ NSString* UITraitsClassString;
         NSLog(@"CDVIonicKeyboard: resize mode %lu", (unsigned long)self.keyboardResizes);
     }
     self.hideFormAccessoryBar = [settings cordovaBoolSettingForKey:@"HideKeyboardFormAccessoryBar" defaultValue:YES];
+    self.HideSuggestionBar = [settings cordovaBoolSettingForKey:@"HideSuggestionBar" defaultValue:YES];
 
     NSString *keyboardStyle = [settings cordovaSettingForKey:@"KeyboardStyle"];
     if (keyboardStyle) {
@@ -358,6 +365,28 @@ static IMP WKOriginalImp;
 
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:self.hideFormAccessoryBar]
                                 callbackId:command.callbackId];
+}
+
+-(void) hideSuggestionBar:(CDVInvokedUrlCommand *)command {
+    _hideSuggestionBar = [command.arguments.firstObject boolValue];
+    if (_isMethodSwizzled) { return; }
+    _isMethodSwizzled = YES;
+    SEL targetSelector = sel_getUid([SelectorString UTF8String]);
+    Class targetClass = NSClassFromString(SuggestionClassString);
+    if (targetClass == nil) { return; }
+    if (![targetClass instancesRespondToSelector:targetSelector]) { return; }
+    Method method = class_getInstanceMethod(targetClass, targetSelector);
+    if (method == NULL) { return; }
+    IMP originalImplementation = method_getImplementation(method);
+    IMP newImp = imp_implementationWithBlock(^BOOL(id me, id delegate, id views) {
+        //we call the original implementation to avoid any possible inconsistency vis-a-vis the state inside private Class
+        BOOL result = ((bool (*)(id,SEL,id,id))originalImplementation)(me,targetSelector,delegate,views);
+        if ([delegate isKindOfClass:NSClassFromString(WKClassString)] && _hideSuggestionBar) {
+            return NO;
+        }
+        return result;
+    });
+    method_setImplementation(method, newImp);
 }
 
 - (void)hide:(CDVInvokedUrlCommand *)command

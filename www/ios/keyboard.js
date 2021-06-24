@@ -76,6 +76,10 @@ Keyboard.hideFormAccessoryBar = function (hide, success) {
     }
 };
 
+Keyboard.hideSuggestionBar = function (hide) {
+        exec(success, null, "CDVIonicKeyboard", "hideSuggestionBar", [hide]);
+};
+
 Keyboard.hide = function () {
     exec(null, null, "CDVIonicKeyboard", "hide", []);
 };
